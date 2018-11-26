@@ -3,6 +3,11 @@
 
 import spacy
 
+from StateManager import StateManager
+
+
+state_manager = StateManager()
+
 # Load English tokenizer, tagger, parser, NER and word vectors
 nlp = spacy.load('en')
 
@@ -16,3 +21,4 @@ while True:
         print("Good evening!")
     else:
         print("Im sorry I don't understand")
+# sentiment for yes/no
