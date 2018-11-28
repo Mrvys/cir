@@ -1,0 +1,8 @@
+Yes
+No
+Beer
+Wine
+White wine
+Red wine
+Plisner
+Lager

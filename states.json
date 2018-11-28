@@ -1,0 +1,30 @@
+{
+    "F1": {
+        "name": "plisner",
+        "final": true,
+        "price": 4,
+        "requires_user": "false",
+        "transitions": null
+    },
+    "F2": {
+      "name": "lager",
+      "final": true,
+      "price": 3,
+      "requires_user": "false",
+      "transitions": null
+    },
+    "F3": {
+      "name": "white wine",
+      "final": true,
+      "price": 5,
+      "requires_user": "false",
+      "transitions": null
+    },
+    "F4": {
+      "name": "red wine",
+      "final": true,
+      "price": 4,
+      "requires_user": "false",
+      "transitions": null
+    }
+}
