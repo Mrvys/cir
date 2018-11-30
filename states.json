@@ -1,30 +1,177 @@
 {
-    "F1": {
-        "name": "plisner",
-        "final": true,
-        "price": 4,
-        "requires_user": "false",
-        "transitions": null
-    },
-    "F2": {
-      "name": "lager",
-      "final": true,
-      "price": 3,
-      "requires_user": "false",
-      "transitions": null
-    },
-    "F3": {
-      "name": "white wine",
-      "final": true,
-      "price": 5,
-      "requires_user": "false",
-      "transitions": null
-    },
-    "F4": {
-      "name": "red wine",
-      "final": true,
-      "price": 4,
-      "requires_user": "false",
-      "transitions": null
+  "E1": {
+    "name": "plisner",
+    "final": true,
+    "price": 4,
+    "requires_user": false,
+    "transitions": null
+  },
+  "E2": {
+    "name": "lager",
+    "final": true,
+    "price": 3,
+    "requires_user": false,
+    "transitions": null
+  },
+  "E3": {
+    "name": "red wine",
+    "final": true,
+    "price": 5,
+    "requires_user": false,
+    "transitions": null
+  },
+  "E4": {
+    "name": "white wine",
+    "final": true,
+    "price": 4,
+    "requires_user": false,
+    "transitions": null
+  },
+  "D1": {
+    "name": "plisner?",
+    "final": false,
+    "price": null,
+    "requires_user": true,
+    "transitions": {
+      "Yes":
+        [ 1, "E1", 4],
+      "No":
+        [ 1, "C1", -1]
     }
+  },
+  "D2": {
+    "name": "lager?",
+    "final": false,
+    "price": null,
+    "requires_user": true,
+    "transitions": {
+      "Yes":
+        [ 1, "E2", 4],
+      "No":
+        [ 1, "C1", -1]
+    }
+  },
+  "D3": {
+    "name": "which beer?",
+    "final": false,
+    "price": null,
+    "requires_user": true,
+    "transitions": null
+  },
+  "D4": {
+    "name": "red?",
+    "final": false,
+    "price": null,
+    "requires_user": true,
+    "transitions": {
+      "Yes":
+        [ 1, "E3", 5],
+      "No":
+        [ 1, "C2", -1]
+    }
+  },
+  "D5": {
+    "name": "white?",
+    "final": false,
+    "price": null,
+    "requires_user": true,
+    "transitions": {
+      "Yes":
+        [ 1, "E4", 4],
+      "No":
+        [ 1, "C2", -1]
+    }
+  },
+  "D6": {
+    "name": "which wine?",
+    "final": false,
+    "price": null,
+    "requires_user": true,
+    "transitions": null
+  },
+  "C1": {
+    "name": "wants beer",
+    "final": false,
+    "price": null,
+    "requires_user": false,
+    "transitions": {
+      "Would you like lager":
+        [ 1, "D1", -1],
+      "Would you like plisner":
+        [ 1, "D2", -1],
+      "Pisner or Lager":
+        [ 1, "D3", -1]
+    }
+  },
+   "C2": {
+    "name": "wants wine",
+    "final": false,
+    "price": null,
+    "requires_user": false,
+    "transitions": {
+      "Would you like red wine":
+        [ 1, "D4", -1],
+      "Would you like white whine":
+        [ 1, "D5", -1],
+      "White or red wine":
+        [ 1, "D6", -1]
+    }
+  },
+  "B1": {
+    "name": "beer",
+    "final": false,
+    "price": null,
+    "requires_user": true,
+    "transitions": {
+      "Yes":
+        [ 1, "C1", -1],
+      "No":
+        [ 1, "A", -1]
+    }
+  },
+  "B2": {
+    "name": "wine",
+    "final": false,
+    "price": null,
+    "requires_user": true,
+    "transitions": {
+      "Yes":
+        [ 1, "C2", -1],
+      "No":
+        [ 1, "A", -1]
+    }
+  },
+  "B3": {
+    "name": "what",
+    "final": false,
+    "price": null,
+    "requires_user": true,
+    "transitions": null
+  },
+  "A": {
+    "name": "no info",
+    "final": false,
+    "price": null,
+    "requires_user": false,
+    "transitions": {
+      "What would you like":
+        [ 1, "B3", -1],
+      "Would you like beer":
+        [ 1, "B1", -1],
+      "Would you like wine":
+        [ 1, "B2", -1],
+      "Would you like red wine":
+        [ 1, "D4", -1],
+      "Would you like white whine":
+        [ 1, "D5", -1],
+      "White or red wine":
+        [ 1, "D6", -1],
+      "Would you like lager":
+        [ 1, "D1", -1],
+      "Would you like plisner":
+        [ 1, "D2", -1],
+      "Pisner or Lager":
+        [ 1, "D3", -1]
+    }
+  }
 }
