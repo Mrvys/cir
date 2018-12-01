@@ -11,14 +11,17 @@ class State:
         self.__is_final = is_final
         self.__price = price
 
+    def get_name(self):
+        return self.__name
+
+    def get_price(self):
+        return self.__price
+
     def get_next_state(self, action):
         return self.__transitions[action][1]
 
     def get_transitions(self):
         return self.__transitions
-
-    def get_max_q(self):
-        pass
 
     def is_final(self):
         return self.__is_final

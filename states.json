@@ -33,9 +33,9 @@
     "price": null,
     "requires_user": true,
     "transitions": {
-      "Yes":
+      "yes":
         [ 1, "E1", 4],
-      "No":
+      "no":
         [ 1, "C1", -1]
     }
   },
@@ -45,9 +45,9 @@
     "price": null,
     "requires_user": true,
     "transitions": {
-      "Yes":
+      "yes":
         [ 1, "E2", 4],
-      "No":
+      "no":
         [ 1, "C1", -1]
     }
   },
@@ -64,9 +64,9 @@
     "price": null,
     "requires_user": true,
     "transitions": {
-      "Yes":
+      "yes":
         [ 1, "E3", 5],
-      "No":
+      "no":
         [ 1, "C2", -1]
     }
   },
@@ -76,9 +76,9 @@
     "price": null,
     "requires_user": true,
     "transitions": {
-      "Yes":
+      "yes":
         [ 1, "E4", 4],
-      "No":
+      "no":
         [ 1, "C2", -1]
     }
   },
@@ -111,7 +111,7 @@
     "transitions": {
       "Would you like red wine":
         [ 1, "D4", -1],
-      "Would you like white whine":
+      "Would you like white wine":
         [ 1, "D5", -1],
       "White or red wine":
         [ 1, "D6", -1]
@@ -123,9 +123,9 @@
     "price": null,
     "requires_user": true,
     "transitions": {
-      "Yes":
+      "yes":
         [ 1, "C1", -1],
-      "No":
+      "no":
         [ 1, "A", -1]
     }
   },
@@ -135,9 +135,9 @@
     "price": null,
     "requires_user": true,
     "transitions": {
-      "Yes":
+      "yes":
         [ 1, "C2", -1],
-      "No":
+      "no":
         [ 1, "A", -1]
     }
   },
@@ -162,7 +162,7 @@
         [ 1, "B2", -1],
       "Would you like red wine":
         [ 1, "D4", -1],
-      "Would you like white whine":
+      "Would you like white wine":
         [ 1, "D5", -1],
       "White or red wine":
         [ 1, "D6", -1],

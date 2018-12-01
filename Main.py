@@ -2,7 +2,7 @@ from StateManager import StateManager
 
 state_manager = StateManager()
 
-while state_manager.finished():
+while not state_manager.finished():
     question = state_manager.choose_question()
     print(question)
 
