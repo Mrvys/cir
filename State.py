@@ -14,5 +14,8 @@ class State:
     def get_next_state(self, action):
         return self.__transitions[action][1]
 
+    def get_transitions(self):
+        return self.__transitions
+
     def get_max_q(self):
         pass

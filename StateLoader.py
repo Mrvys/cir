@@ -43,10 +43,24 @@ class StateLoader:
         return states
 
     def load_qtable(self, filename, states):
-        pass  # should return the qTable read from the file or crete new one
+        try:
+            with open(filename) as file:
+                qtable = json.load(file)
+        except:
+            qtable = {}
 
-    def save_qtable(self, filename):
-        pass  # should save updated q table to a file
+            for state_id, state in states.items():
+                qtable[state_id] = {}
+
+                for action in state.get_transitions():
+                    qtable[state_id][action] = 0
+
+        return qtable
+
+    def save_qtable(self, filename, qtable):
+        with open(filename, "w+") as file:
+            json_qtable = json.dumps(qtable)
+            file.write(json_qtable)
 
     def load_questions(self, filename):
         pass

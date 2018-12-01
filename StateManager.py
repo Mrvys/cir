@@ -10,7 +10,7 @@ class StateManager:
         # self.__answers = self.__state_loader.load_answers("path")
         self.__states = self.__state_loader.load_states("./states.json")
         self.__current_state = self.__states["A"]
-        self.__qtable = self.__state_loader.load_qtable("./qtable.txt", self.__states)
+        self.__qtable = self.__state_loader.load_qtable("./qtable.json", self.__states)
 
     def get_current_state(self):
         return self.__current_state
@@ -20,3 +20,7 @@ class StateManager:
 
     def choose_question(self):
         pass
+
+    def save_qtable(self):
+        self.__state_loader.save_qtable("./qtable.json", self.__qtable)
+
