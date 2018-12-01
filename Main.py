@@ -1,24 +1,11 @@
-# pip install spacy
-# python -m spacy download en_core_web_sm
-
-import spacy
-
 from StateManager import StateManager
-
 
 state_manager = StateManager()
 
-# Load English tokenizer, tagger, parser, NER and word vectors
-nlp = spacy.load('en')
+while state_manager.finished():
+    question = state_manager.choose_question()
+    print(question)
 
-# Determine semantic similarities
-greeting = nlp(u"hello")
-
-while True:
     user_input = input('Enter your input:')
-    user_input_nlp = nlp(user_input)
-    if user_input_nlp.similarity(greeting) > 0.7:
-        print("Good evening!")
-    else:
-        print("Im sorry I don't understand")
-# sentiment for yes/no
+
+    state_manager.process_input(user_input)

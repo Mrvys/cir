@@ -15,7 +15,7 @@ class StateManager:
     def get_current_state(self):
         return self.__current_state
 
-    def process_input(self):
+    def process_input(self, user_input):
         pass
 
     def choose_question(self):
@@ -23,4 +23,7 @@ class StateManager:
 
     def save_qtable(self):
         self.__state_loader.save_qtable("./qtable.json", self.__qtable)
+
+    def finished(self):
+        return not self.__current_state.is_final()
 

@@ -19,3 +19,6 @@ class State:
 
     def get_max_q(self):
         pass
+
+    def is_final(self):
+        return self.__is_final
