@@ -42,7 +42,8 @@ class StateLoader:
 
         return states
 
-    def load_qtable(self, filename, states):
+    def load_qtable(self, gender, group, states):
+        filename = self.get_qtable_filename(gender, group)
         try:
             with open(filename) as file:
                 qtable = json.load(file)
@@ -57,10 +58,15 @@ class StateLoader:
 
         return qtable
 
-    def save_qtable(self, filename, qtable):
+    def save_qtable(self, qtable, gender, group):
+        filename = self.get_qtable_filename(gender, group)
         with open(filename, "w+") as file:
             json_qtable = json.dumps(qtable)
             file.write(json_qtable)
+
+    @staticmethod
+    def get_qtable_filename(gender, group):
+        return "./qtable_" + gender + "_" + group + ".json"
 
     def load_questions(self, filename):
         pass

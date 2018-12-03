@@ -18,7 +18,7 @@ class StateManager:
         self.__states = self.__state_loader.load_states("./states.json")
         self.__current_state_id = "A"
         self.__previous_state_id = "A"
-        self.__qtable = self.__state_loader.load_qtable("./qtable.json", self.__states)
+        self.__qtable = self.__state_loader.load_qtable("man", "student", self.__states)
 
         self.__last_question = ""
 
@@ -68,7 +68,7 @@ class StateManager:
         return actions_available, random_action
 
     def save_qtable(self):
-        self.__state_loader.save_qtable("./qtable.json", self.__qtable)
+        self.__state_loader.save_qtable(self.__qtable, "man", "student")
 
     def finished(self):
         if self.get_current_state().is_final():
