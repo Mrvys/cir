@@ -20,6 +20,8 @@ class StateManager:
         self.__previous_state_id = "A"
         self.__qtable = self.__state_loader.load_qtable("./qtable.json", self.__states)
 
+        self.__last_question = ""
+
         self.__text_recognizer = TextRecognizer()
 
     def get_current_state(self):
@@ -45,16 +47,25 @@ class StateManager:
         if rand > self.__epsilon:  # exploitation
             chosen_action = self.get_max_q_action()
         else:  # exploration
-            actions_available = list(self.get_current_state().get_transitions().keys())
-            random_action = random.randint(0, len(actions_available) - 1)
+            actions_available, random_action = self.get_random_action()
             chosen_action = actions_available[random_action]
 
         self.update_qtable(chosen_action)
 
         self.__previous_state_id = self.__current_state_id
         self.__current_state_id = self.get_current_state().get_next_state(chosen_action)
+        self.__last_question = chosen_action
 
         return chosen_action + '?'
+
+    def get_random_action(self):
+        actions_available = list(self.get_current_state().get_transitions().keys())
+        random_action = random.randint(0, len(actions_available) - 1)
+
+        if random_action == self.__last_question:
+            return self.get_random_action()
+
+        return actions_available, random_action
 
     def save_qtable(self):
         self.__state_loader.save_qtable("./qtable.json", self.__qtable)
@@ -84,6 +95,8 @@ class StateManager:
         max_actions = []
 
         for action, value in self.__qtable[self.__current_state_id].items():
+            if action == self.__last_question:
+                continue
             if value > max_value:
                 max_actions = [action]
                 max_value = value
