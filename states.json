@@ -164,14 +164,10 @@
         [ 1, "D4", -1],
       "Would you like white wine":
         [ 1, "D5", -1],
-      "White or red wine":
-        [ 1, "D6", -1],
       "Would you like lager":
         [ 1, "D1", -1],
       "Would you like plisner":
-        [ 1, "D2", -1],
-      "Pisner or Lager":
-        [ 1, "D3", -1]
+        [ 1, "D2", -1]
     }
   }
 }

@@ -25,3 +25,7 @@ class State:
 
     def is_final(self):
         return self.__is_final
+
+    def get_reward(self, action):
+        return self.__transitions[action][2]
+

@@ -8,6 +8,8 @@ class StateManager:
 
     def __init__(self):
         self.__epsilon = 0.5  # TODO How and when should we decrease it?
+        self._learning_rate = 0.9  # TODO Fit the best
+        self.gamma = 0.95  # discount rate
 
         self.__state_loader = StateLoader("./universalUserActions.json")
 
@@ -62,7 +64,12 @@ class StateManager:
         return False
 
     def update_qtable(self, action_chosen):
-        pass
+        current_q = self.__qtable[self.__current_state_id][action_chosen]
+        reward = self.get_current_state().get_reward(action_chosen)
+        next_state_id = self.get_current_state().get_next_state(action_chosen)
+        delta_q = self._learning_rate * (reward + self.gamma * self.get_max_q_value(next_state_id) - current_q)
+
+        self.__qtable[self.__current_state_id][action_chosen] = current_q + delta_q
 
     def get_max_q_action(self):
         max_value = 0
@@ -71,6 +78,7 @@ class StateManager:
         for action, value in self.__qtable[self.__current_state_id].items():
             if value > max_value:
                 max_actions = [action]
+                max_value = value
             elif value == max_value:
                 max_actions.append(action)
 
@@ -79,3 +87,10 @@ class StateManager:
             max_actions = [max_actions[random_max]]
 
         return max_actions[0]
+
+    def get_max_q_value(self, state_id):
+        q_values = self.__qtable[state_id].values()
+
+        if len(q_values) == 0:
+            return 0
+        return max(q_values)
