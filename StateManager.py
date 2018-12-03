@@ -17,6 +17,7 @@ class StateManager:
         # self.__answers = self.__state_loader.load_answers("path")
         self.__states = self.__state_loader.load_states("./states.json")
         self.__current_state_id = "A"
+        self.__previous_state_id = "A"
         self.__qtable = self.__state_loader.load_qtable("./qtable.json", self.__states)
 
         self.__text_recognizer = TextRecognizer()
@@ -30,7 +31,13 @@ class StateManager:
 
         self.update_qtable(chosen_action)
 
-        self.__current_state_id = self.get_current_state().get_next_state(chosen_action)
+        if chosen_action == 'no':
+            temp = self.__current_state_id
+            self.__current_state_id = self.__previous_state_id
+            self.__previous_state_id = temp
+        else:
+            self.__previous_state_id = self.__current_state_id
+            self.__current_state_id = self.get_current_state().get_next_state(chosen_action)
 
     def choose_question(self):
         rand = random.uniform(0, 1)
@@ -44,6 +51,7 @@ class StateManager:
 
         self.update_qtable(chosen_action)
 
+        self.__previous_state_id = self.__current_state_id
         self.__current_state_id = self.get_current_state().get_next_state(chosen_action)
 
         return chosen_action + '?'
