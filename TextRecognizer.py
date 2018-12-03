@@ -10,6 +10,8 @@ class TextRecognizer:
         self.__nlp = spacy.load('en')  # Load English tokenizer, tagger, parser, NER and word vectors
 
     def choose_most_sufficient(self, user_input, actions):
+        if user_input == "red" or user_input == "white":
+            user_input = user_input + ' wine'
         return user_input.lower()
         # TODO Change to choose the most similar phrase
 
