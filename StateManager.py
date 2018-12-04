@@ -47,8 +47,7 @@ class StateManager:
         if rand > self.__epsilon:  # exploitation
             chosen_action = self.get_max_q_action()
         else:  # exploration
-            actions_available, random_action = self.get_random_action()
-            chosen_action = actions_available[random_action]
+            chosen_action = self.get_random_action()
 
         self.update_qtable(chosen_action)
 
@@ -61,11 +60,12 @@ class StateManager:
     def get_random_action(self):
         actions_available = list(self.get_current_state().get_transitions().keys())
         random_action = random.randint(0, len(actions_available) - 1)
+        action_chosen = actions_available[random_action]
 
-        if random_action == self.__last_question:
+        if action_chosen == self.__last_question:
             return self.get_random_action()
 
-        return actions_available, random_action
+        return action_chosen
 
     def save_qtable(self):
         self.__state_loader.save_qtable(self.__qtable, "man", "student")
@@ -93,8 +93,13 @@ class StateManager:
     def get_max_q_action(self):
         max_value = 0
         max_actions = []
+        first = True
 
         for action, value in self.__qtable[self.__current_state_id].items():
+            if first:
+                first = False
+                max_value = value
+                max_actions = [action]
             if action == self.__last_question:
                 continue
             if value > max_value:
