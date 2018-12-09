@@ -31,15 +31,18 @@ class StateManager:
         actions_available = list(self.get_current_state().get_transitions().keys())
         chosen_action = self.__text_recognizer.choose_most_sufficient(user_input, actions_available)
 
-        self.update_qtable(chosen_action)
+        if chosen_action in actions_available:
+            self.update_qtable(chosen_action)
 
-        if chosen_action == 'no':
-            temp = self.__current_state_id
-            self.__current_state_id = self.__previous_state_id
-            self.__previous_state_id = temp
+            if chosen_action == 'no':
+                temp = self.__current_state_id
+                self.__current_state_id = self.__previous_state_id
+                self.__previous_state_id = temp
+            else:
+                self.__previous_state_id = self.__current_state_id
+                self.__current_state_id = self.get_current_state().get_next_state(chosen_action)
         else:
-            self.__previous_state_id = self.__current_state_id
-            self.__current_state_id = self.get_current_state().get_next_state(chosen_action)
+            return -1
 
     def choose_question(self):
         rand = random.uniform(0, 1)

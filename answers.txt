@@ -4,5 +4,5 @@ beer
 wine
 white wine
 red wine
-plisner
+pilsner
 lager

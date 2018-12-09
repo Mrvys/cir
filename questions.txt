@@ -4,7 +4,7 @@ Would you like wine?
 What kind of beer would you like?
 What kind of wine would you like?
 Would you like lager?
-Would you like plisner?
+Would you like pilsner?
 Would you like red wine?
 Would you like white wine?
 OK, one *, it's # euro.

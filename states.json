@@ -1,6 +1,6 @@
 {
   "E1": {
-    "name": "plisner",
+    "name": "pilsner",
     "final": true,
     "price": 4,
     "requires_user": false,
@@ -28,7 +28,7 @@
     "transitions": null
   },
   "D1": {
-    "name": "plisner?",
+    "name": "pilsner?",
     "final": false,
     "price": null,
     "requires_user": true,
@@ -97,9 +97,9 @@
     "transitions": {
       "Would you like lager":
         [ 1, "D1", -1],
-      "Would you like plisner":
+      "Would you like pilsner":
         [ 1, "D2", -1],
-      "Plisner or Lager":
+      "Pilsner or Lager":
         [ 1, "D3", -1]
     }
   },
@@ -166,7 +166,7 @@
         [ 1, "D5", -1],
       "Would you like lager":
         [ 1, "D1", -1],
-      "Would you like plisner":
+      "Would you like pilsner":
         [ 1, "D2", -1]
     }
   }
