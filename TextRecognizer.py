@@ -12,7 +12,14 @@ class TextRecognizer:
     def choose_most_sufficient(self, user_input, actions):
         if user_input == "red" or user_input == "white":
             user_input = user_input + ' wine'
-        return user_input.lower()
+            return user_input.lower()
+
+        for action in actions:
+            if action in user_input:
+                return action
+
+        return -1
+
         # TODO Change to choose the most similar phrase
 
         # user_input_nlp = nlp(user_input)
