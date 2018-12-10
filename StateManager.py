@@ -6,7 +6,10 @@ import random
 
 class StateManager:
 
-    def __init__(self):
+    def __init__(self, gender, group):
+        self.__gender = gender
+        self.__group = group
+
         self.__epsilon = 0.5  # TODO How and when should we decrease it?
         self._learning_rate = 0.9  # TODO Fit the best
         self.gamma = 0.95  # discount rate
@@ -18,7 +21,7 @@ class StateManager:
         self.__states = self.__state_loader.load_states("./states.json")
         self.__current_state_id = "A"
         self.__previous_state_id = "A"
-        self.__qtable = self.__state_loader.load_qtable("man", "student", self.__states)
+        self.__qtable = self.__state_loader.load_qtable(gender, group, self.__states)
 
         self.__last_question = ""
 
@@ -71,7 +74,7 @@ class StateManager:
         return action_chosen
 
     def save_qtable(self):
-        self.__state_loader.save_qtable(self.__qtable, "man", "student")
+        self.__state_loader.save_qtable(self.__qtable, self.__gender, self.__group)
 
     def finished(self):
         if self.get_current_state().is_final():
@@ -123,3 +126,8 @@ class StateManager:
         if len(q_values) == 0:
             return 0
         return max(q_values)
+
+    def restart(self):
+        self.__current_state_id = "A"
+        self.__previous_state_id = "A"
+        self.__last_question = ""

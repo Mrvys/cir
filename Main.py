@@ -2,8 +2,10 @@ from StateManager import StateManager
 
 finish = False
 
+state_manager = StateManager("man", "student")
+
 while not finish:
-    state_manager = StateManager()
+    state_manager.restart()
 
     response = None
     while not state_manager.finished():
