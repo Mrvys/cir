@@ -3,19 +3,22 @@ import sys
 import time
 from time import sleep
 from PyQt5 import QtWidgets, QtCore, QtGui, QtSvg, uic
+from threading import Timer
 
 class BarAssistantApp(object):
 
-    STATUS_WAITING = 'Waiting'
-    STATUS_PROCESSING_REQUEST = 'Processing request'
 
     def __init__(self, path='./bar_assistant/'):
         self.PATH = os.path.abspath(path) + '/'
         self.VALUE_ROLE = QtCore.Qt.UserRole
+        self.STATUS_WAITING = 'Waiting'
+        self.STATUS_PROCESSING_REQUEST = 'Processing request'
         self.AVATAR = {'normal': {'name':'smile.jpg'},
                        'talking': {'name':'smile_talking.gif'}}
         self.PICS_PATH = './pics/'
         self.UI_PATH = './ui/'
+        self.CHAR_DELAY_IN_MILIS = 3
+        self.MAGIC_CONSTANT = 1.75
 
         self.app = None
         self.assistant = None
@@ -100,16 +103,31 @@ class BarAssistantApp(object):
         self.app.processEvents()
         self.assistant.request(message)
 
-    def send_message(self):
+        speak_length = len(message) * self.CHAR_DELAY_IN_MILIS / 100 * self.MAGIC_CONSTANT
+
+        timer = Timer(speak_length, self.shut_up)
+        timer.start()
+
+        self.send_message(message)
+
+    def send_message(self, message):
         self.status = self.STATUS_WAITING
-        self.refresh_assistant()
-        message = self.assistant.response()
-        self.chat.putMessage('Assistant', message)
-        self.refresh_chat()
+        # self.refresh_assistant()
+        # message = self.assistant.response()
+        self.chat.putMessage('Assistant', '')
+        for char in message:
+            self.chat.putChar(char)
+            self.refresh_chat()
+            for _ in range(int(self.CHAR_DELAY_IN_MILIS)):
+                sleep(0.01)
+                self.app.processEvents()
 
         self.set_enable_user_input(True)
 
         self.userInput.setFocus()
+
+    def shut_up(self):
+        self.avatar.setPixmap(self.AVATAR['normal']['pixmap'])
 
     def speak_capture(self):
         message = 'Capturing speech.'
@@ -190,6 +208,9 @@ class Chat:
             message = username + ': ' + msg['text']
             text += message + '\n'
         return text
+
+    def putChar(self, char):
+        self.chat[-1]['text'] += char
 
 
 class Assistant:
