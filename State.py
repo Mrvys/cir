@@ -4,7 +4,7 @@ class State:
         self.__name = name
         self.__requires_user = requires_user  # if  user answer is required or assistant question
 
-        # map - key: transition word(action), value:(probability, next state, reward)
+        # map - key: transition word(action), value:(probability, next state, reward, isUnexpected)
         self.__transitions = transitions
 
         # self.q_table = q_table  # map - key: transition word (like a sentence), value: q value
@@ -29,3 +29,8 @@ class State:
     def get_reward(self, action):
         return self.__transitions[action][2]
 
+    def is_action_unexpected(self, action):
+        return self.__transitions[action][3]
+
+    def requires_user(self):
+        return self.__requires_user

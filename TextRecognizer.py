@@ -16,7 +16,7 @@ class TextRecognizer:
 
         # Determine semantic similarities
         doc1 = self.__nlp(user_input)
-        top_score =	{
+        top_score = {
             'score': 0,
             'input': None
         }

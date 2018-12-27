@@ -34,9 +34,9 @@
     "requires_user": true,
     "transitions": {
       "yes":
-        [ 1, "E1", 4],
+        [ 1, "E1", 4, false],
       "no":
-        [ 1, "C1", -2]
+        [ 1, "C1", -2, false]
     }
   },
   "D2": {
@@ -46,9 +46,9 @@
     "requires_user": true,
     "transitions": {
       "yes":
-        [ 1, "E2", 4],
+        [ 1, "E2", 4, false],
       "no":
-        [ 1, "C1", -2]
+        [ 1, "C1", -2, false]
     }
   },
   "D3": {
@@ -65,9 +65,9 @@
     "requires_user": true,
     "transitions": {
       "yes":
-        [ 1, "E3", 5],
+        [ 1, "E3", 5, false],
       "no":
-        [ 1, "C2", -2]
+        [ 1, "C2", -2, false]
     }
   },
   "D5": {
@@ -77,9 +77,9 @@
     "requires_user": true,
     "transitions": {
       "yes":
-        [ 1, "E4", 4],
+        [ 1, "E4", 4, false],
       "no":
-        [ 1, "C2", -2]
+        [ 1, "C2", -2, false]
     }
   },
   "D6": {
@@ -96,11 +96,11 @@
     "requires_user": false,
     "transitions": {
       "Would you like lager":
-        [ 1, "D2", -1],
+        [ 1, "D2", -1, false],
       "Would you like pilsner":
-        [ 1, "D1", -1],
+        [ 1, "D1", -1, false],
       "Pilsner or Lager":
-        [ 1, "D3", -1]
+        [ 1, "D3", -1, false]
     }
   },
    "C2": {
@@ -110,11 +110,11 @@
     "requires_user": false,
     "transitions": {
       "Would you like red wine":
-        [ 1, "D4", -1],
+        [ 1, "D4", -1, false],
       "Would you like white wine":
-        [ 1, "D5", -1],
+        [ 1, "D5", -1, false],
       "White or red wine":
-        [ 1, "D6", -1]
+        [ 1, "D6", -1, false]
     }
   },
   "B1": {
@@ -124,9 +124,9 @@
     "requires_user": true,
     "transitions": {
       "yes":
-        [ 1, "C1", -1],
+        [ 1, "C1", -1, false],
       "no":
-        [ 1, "A", -2]
+        [ 1, "A", -2, false]
     }
   },
   "B2": {
@@ -136,9 +136,9 @@
     "requires_user": true,
     "transitions": {
       "yes":
-        [ 1, "C2", -1],
+        [ 1, "C2", -1, false],
       "no":
-        [ 1, "A", -2]
+        [ 1, "A", -2, false]
     }
   },
   "B3": {
@@ -155,19 +155,19 @@
     "requires_user": false,
     "transitions": {
       "What would you like":
-        [ 1, "B3", -1],
+        [ 1, "B3", -1, false],
       "Would you like beer":
-        [ 1, "B1", -1],
+        [ 1, "B1", -1, false],
       "Would you like wine":
-        [ 1, "B2", -1],
+        [ 1, "B2", -1, false],
       "Would you like red wine":
-        [ 1, "D4", -1],
+        [ 1, "D4", -1, false],
       "Would you like white wine":
-        [ 1, "D5", -1],
+        [ 1, "D5", -1, false],
       "Would you like lager":
-        [ 1, "D2", -1],
+        [ 1, "D2", -1, false],
       "Would you like pilsner":
-        [ 1, "D1", -1]
+        [ 1, "D1", -1, false]
     }
   }
 }

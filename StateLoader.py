@@ -28,13 +28,12 @@ class StateLoader:
         for state_id in data:
             transitions = {}
 
+            if data[state_id]["requires_user"]:
+                transitions.update(self.__universal_user_actions)
+
             if data[state_id]["transitions"]:
                 for action in data[state_id]["transitions"]:
                     transitions[action] = tuple(data[state_id]["transitions"][action])
-                    pass
-
-            if data[state_id]["requires_user"]:
-                transitions.update(self.__universal_user_actions)
 
             new_state = State(data[state_id]["name"], data[state_id]["final"], data[state_id]["price"],
                               data[state_id]["requires_user"], transitions)
