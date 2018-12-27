@@ -15,11 +15,11 @@ class StateManager:
         self.__gender = gender
         self.__group = group
 
-        self.__state_loader = StateLoader("./universalUserActions.json")
+        self.__state_loader = StateLoader("../universalUserActions.json")
 
         # self.__questions = self.__state_loader.load_questions("path")
         # self.__answers = self.__state_loader.load_answers("path")
-        self.__states = self.__state_loader.load_states("./states.json")
+        self.__states = self.__state_loader.load_states("../states.json")
         self.__current_state_id = "A"
         self.__previous_state_id = "A"
         self.__qtable = self.__state_loader.load_qtable(gender, group, self.__states)
@@ -92,10 +92,6 @@ class StateManager:
                 self.__orders[self.__last_order] = 1
 
             self.save_qtable()
-
-            drink_name = self.get_current_state().get_name()
-            drink_price = self.get_current_state().get_price()
-            print(f"OK, one {drink_name}, it's {drink_price} euro.")
 
             return True
 

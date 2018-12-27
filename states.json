@@ -96,9 +96,9 @@
     "requires_user": false,
     "transitions": {
       "Would you like lager":
-        [ 1, "D1", -1],
-      "Would you like pilsner":
         [ 1, "D2", -1],
+      "Would you like pilsner":
+        [ 1, "D1", -1],
       "Pilsner or Lager":
         [ 1, "D3", -1]
     }

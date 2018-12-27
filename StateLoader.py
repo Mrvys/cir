@@ -66,7 +66,7 @@ class StateLoader:
 
     @staticmethod
     def get_qtable_filename(gender, group):
-        return "./qtable_" + gender + "_" + group + ".json"
+        return "../qtable_" + gender + "_" + group + ".json"
 
     def load_questions(self, filename):
         pass

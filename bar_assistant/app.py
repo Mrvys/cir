@@ -5,8 +5,10 @@ from time import sleep
 from PyQt5 import QtWidgets, QtCore, QtGui, QtSvg, uic
 from threading import Timer
 
-class BarAssistantApp(object):
+from StateManager import StateManager
 
+
+class BarAssistantApp(object):
 
     def __init__(self, path='./bar_assistant/'):
         self.PATH = os.path.abspath(path) + '/'
@@ -29,6 +31,9 @@ class BarAssistantApp(object):
         self.chatArea = None
         self.userInput = None
 
+        self.state_manager = StateManager("man", "student")
+        self.last_question = None
+
         self.init()
 
     def init(self):
@@ -48,6 +53,8 @@ class BarAssistantApp(object):
             self.init_user_area()
             self.init_signals()
 
+            self.choose_first_question()
+
         except Exception as e:
             self.show_error('Application could not initiate properly due to this error: \n' + str(e))
             sys.exit(1)
@@ -58,6 +65,7 @@ class BarAssistantApp(object):
         self.assistant = Assistant()
         self.init_avatar_area()
         self.refresh_assistant()
+
 
     def init_avatar_area(self):
         # získáme oblast s posuvníky z Qt Designeru
@@ -76,7 +84,7 @@ class BarAssistantApp(object):
 
     def init_signals(self):
         action = self.window.findChild(QtWidgets.QWidget, 'sendButton')
-        action.clicked.connect(lambda: self.recieve_message())
+        action.clicked.connect(lambda: self.receive_message())
         action = self.window.findChild(QtWidgets.QWidget, 'speakButton')
         action.clicked.connect(lambda: self.speak_capture())
         shortcut = QtWidgets.QShortcut(QtGui.QKeySequence("Ctrl+R"), self.window)
@@ -88,7 +96,11 @@ class BarAssistantApp(object):
         self.AVATAR['normal']['pixmap'] = QtGui.QPixmap(self.PATH + self.PICS_PATH + self.AVATAR['normal']['name'])
         self.AVATAR['talking']['movie'] = QtGui.QMovie(self.PATH + self.PICS_PATH + self.AVATAR['talking']['name'])
 
-    def recieve_message(self):
+    def choose_first_question(self):
+        self.last_question = self.state_manager.choose_question()
+        self.send_message(self.last_question)
+
+    def receive_message(self):
         self.set_enable_user_input(False)
         self.status = self.STATUS_PROCESSING_REQUEST
         self.refresh_assistant()
@@ -96,22 +108,36 @@ class BarAssistantApp(object):
 
         inputArea = self.window.findChild(QtWidgets.QLineEdit, 'userInput')
         message = inputArea.text()
+
         inputArea.setText('')
         self.chat.putMessage('User', message)
         self.refresh_chat()
 
         self.app.processEvents()
-        self.assistant.request(message)
+
+        response = self.state_manager.process_input(message)
+
+        if self.state_manager.finished():
+            drink_name = self.state_manager.get_current_state().get_name()
+            drink_price = self.state_manager.get_current_state().get_price()
+            self.send_message(f"OK, one {drink_name}, it's {drink_price} euro.")
+
+            self.state_manager.restart()
+
+        if response != -1:
+            self.last_question = self.state_manager.choose_question()
+        else:
+            self.send_message("Sorry, I don't understand.")
+        self.send_message(self.last_question)
+
+    def send_message(self, message):
+        self.status = self.STATUS_WAITING
 
         speak_length = len(message) * self.CHAR_DELAY_IN_MILIS / 100 * self.MAGIC_CONSTANT
 
         timer = Timer(speak_length, self.shut_up)
         timer.start()
 
-        self.send_message(message)
-
-    def send_message(self, message):
-        self.status = self.STATUS_WAITING
         # self.refresh_assistant()
         # message = self.assistant.response()
         self.chat.putMessage('Assistant', '')
@@ -215,7 +241,7 @@ class Chat:
 
 class Assistant:
 
-    def request(self, message):
+    def request(self, text):
         pass
 
     def response(self):
