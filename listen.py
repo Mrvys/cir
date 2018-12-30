@@ -1,9 +1,19 @@
 import speech_recognition as sr
 
-r = sr.Recognizer()
+class Listen:
 
-with sr.Microphone() as source:
-	audio = r.listen(source)
+	def listen(self):
+		r = sr.Recognizer()
 
-	with open('resources\\speech.wav', 'wb') as f:
-		f.write(audio.get_wav_data())
+		with sr.Microphone() as source:
+			audio = r.listen(source)
+
+			with open('resources\\speech.wav', 'wb') as f:
+				f.write(audio.get_wav_data())
+
+		try:
+			return r.recognize_google(audio)
+		except sr.UnknownValueError:
+			print("Google Speech Recognition could not understand audio")
+		except sr.RequestError as e:
+			print("Could not request results from Google Speech Recognition service; {0}".format(e))

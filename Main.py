@@ -1,8 +1,13 @@
 from StateManager import StateManager
+from listen import Listen
+import time
+from speech import Speech
 
 finish = False
 
 state_manager = StateManager("man", "student")
+listen = Listen()
+speech = Speech()
 
 while not finish:
     state_manager.restart()
@@ -14,6 +19,11 @@ while not finish:
         print(question)
 
         user_input = input('Enter your input:')
+
+        user_input = listen.listen()
+        #time.sleep(2)
+        #user_input = speech.detect()
+        print(user_input)
 
         response = state_manager.process_input(user_input)
 

@@ -14,12 +14,17 @@ class StateManager:
     def __init__(self, gender, group):
         self.__gender = gender
         self.__group = group
-
-        self.__state_loader = StateLoader("../universalUserActions.json")
+        try:
+            self.__state_loader = StateLoader("../universalUserActions.json")
+        except:
+            self.__state_loader = StateLoader("./universalUserActions.json")
 
         # self.__questions = self.__state_loader.load_questions("path")
         # self.__answers = self.__state_loader.load_answers("path")
-        self.__states = self.__state_loader.load_states("../states.json")
+        try:
+            self.__states = self.__state_loader.load_states("../states.json")
+        except:
+            self.__states = self.__state_loader.load_states("./states.json")
         self.__current_state_id = "A"
         self.__previous_state_id = "A"
         self.__qtable = self.__state_loader.load_qtable(gender, group, self.__states)
@@ -90,6 +95,10 @@ class StateManager:
 
             if self.still_learning():
                 self.save_qtable()
+
+            drink_name = self.get_current_state().get_name()
+            drink_price = self.get_current_state().get_price()
+            print(f"OK, one {drink_name}, it's {drink_price} euro.")
 
             return True
 
