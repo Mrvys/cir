@@ -9,9 +9,13 @@ class StateManager:
     __question_prefix = "Would you like "
     __epsilon = 0.10  # TODO How and when should we decrease it?
     __learning_rate = 0.4  # TODO Fit the best
+    __orders = {}
+    __last_order = ""
+    __last_questions = []
     gamma = 0.95  # discount rate
 
     def __init__(self, gender, group):
+        self.__MAX_REWARD = 10
         self.__gender = gender
         self.__group = group
         try:
@@ -19,8 +23,6 @@ class StateManager:
         except:
             self.__state_loader = StateLoader("./universalUserActions.json")
 
-        # self.__questions = self.__state_loader.load_questions("path")
-        # self.__answers = self.__state_loader.load_answers("path")
         try:
             self.__states = self.__state_loader.load_states("../states.json")
         except:
@@ -28,9 +30,7 @@ class StateManager:
         self.__current_state_id = "A"
         self.__previous_state_id = "A"
         self.__qtable = self.__state_loader.load_qtable(gender, group, self.__states)
-
-        self.__last_order = ""
-        self.__last_questions = []
+        self.__orders = self.__state_loader.load_orders(gender, group)
 
         self.__text_recognizer = TextRecognizer()
 
@@ -89,11 +89,20 @@ class StateManager:
     def save_qtable(self):
         self.__state_loader.save_qtable(self.__qtable, self.__gender, self.__group)
 
+    def save_orders(self):
+        self.__state_loader.save_orders(self.__orders, self.__gender, self.__group)
+
     def finished(self):
         if self.get_current_state().is_final():
             self.__last_order = self.get_current_state().get_name()
 
+            if self.__last_order in self.__orders:
+                self.__orders[self.__last_order] += 1
+            else:
+                self.__orders[self.__last_order] = 1
+
             if self.still_learning():
+                self.save_orders()
                 self.save_qtable()
 
             drink_name = self.get_current_state().get_name()
@@ -119,8 +128,8 @@ class StateManager:
 
     def update_qtable_cell(self, action_chosen, state_id):
         current_q = self.__qtable[state_id][action_chosen]
-        reward = self.__states[state_id].get_reward(action_chosen)
         next_state_id = self.__states[state_id].get_next_state(action_chosen)
+        reward = self.calculate_reward(action_chosen, next_state_id, state_id)
         delta_q = self.__learning_rate * (reward + self.gamma * self.get_max_q_value(next_state_id) - current_q)
 
         self.__qtable[state_id][action_chosen] = current_q + delta_q
@@ -151,6 +160,17 @@ class StateManager:
 
         return max_actions[0]
 
+    def calculate_reward(self, action_chosen, next_state_id, state_id):
+        reward = self.__states[state_id].get_reward(action_chosen)
+        next_state = self.__states[next_state_id]
+
+        if next_state.is_final() and next_state.get_name() in self.__orders:
+            total = sum(self.__orders.values())
+            bias = (self.__MAX_REWARD - next_state.get_price()) * self.__orders[next_state.get_name()] / total
+            reward += bias
+
+        return reward
+
     def get_max_q_value(self, state_id):
         q_values = self.__qtable[state_id].values()
 
@@ -173,3 +193,4 @@ class StateManager:
 
     def still_learning(self):
         return self.__epsilon > 0.01
+
