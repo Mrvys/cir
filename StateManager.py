@@ -5,11 +5,11 @@ import random
 
 
 class StateManager:
-
     __question_prefix = "Would you like "
-    __epsilon = 0.10  # TODO How and when should we decrease it?
+    __epsilon = 0.0  # TODO How and when should we decrease it?
     __learning_rate = 0.4  # TODO Fit the best
-    __orders = {}
+    __group_orders = {}
+    __user_orders = {}
     __last_order = ""
     __last_questions = []
     gamma = 0.95  # discount rate
@@ -30,7 +30,7 @@ class StateManager:
         self.__current_state_id = "A"
         self.__previous_state_id = "A"
         self.__qtable = self.__state_loader.load_qtable(gender, group, self.__states)
-        self.__orders = self.__state_loader.load_orders(gender, group)
+        self.__group_orders = self.__state_loader.load_orders(gender, group)
 
         self.__text_recognizer = TextRecognizer()
 
@@ -90,20 +90,25 @@ class StateManager:
         self.__state_loader.save_qtable(self.__qtable, self.__gender, self.__group)
 
     def save_orders(self):
-        self.__state_loader.save_orders(self.__orders, self.__gender, self.__group)
+        self.__state_loader.save_orders(self.__group_orders, self.__gender, self.__group)
 
     def finished(self):
         if self.get_current_state().is_final():
             self.__last_order = self.get_current_state().get_name()
 
-            if self.__last_order in self.__orders:
-                self.__orders[self.__last_order] += 1
+            if self.__last_order in self.__group_orders:
+                self.__group_orders[self.__last_order] += 1
             else:
-                self.__orders[self.__last_order] = 1
+                self.__group_orders[self.__last_order] = 1
 
             if self.still_learning():
                 self.save_orders()
                 self.save_qtable()
+            else:
+                if self.__last_order in self.__user_orders:
+                    self.__user_orders[self.__last_order] += 1
+                else:
+                    self.__user_orders[self.__last_order] = 1
 
             drink_name = self.get_current_state().get_name()
             drink_price = self.get_current_state().get_price()
@@ -164,14 +169,19 @@ class StateManager:
         reward = self.__states[state_id].get_reward(action_chosen)
         next_state = self.__states[next_state_id]
 
-        if next_state.is_final() and next_state.get_name() in self.__orders:
-            total = sum(self.__orders.values())
-            bias = (self.__MAX_REWARD - next_state.get_price()) * self.__orders[next_state.get_name()] / total
+        if next_state.is_final() and next_state.get_name() in self.__group_orders:
+            total = sum(self.__group_orders.values())
+            bias = (self.__MAX_REWARD - reward) * self.__group_orders[next_state.get_name()] / total
             reward += bias
+
+            if not self.still_learning() and next_state.get_name() in self.__user_orders:
+                total = sum(self.__user_orders.values())
+                bias = (self.__MAX_REWARD - reward) * self.__user_orders[next_state.get_name()] / (total + 1)
+                reward += bias
 
         return reward
 
-    def get_max_q_value(self, state_id):
+    def get_max_q_value(self, state_id) :
         q_values = self.__qtable[state_id].values()
 
         if len(q_values) == 0:
@@ -193,4 +203,3 @@ class StateManager:
 
     def still_learning(self):
         return self.__epsilon > 0.01
-
