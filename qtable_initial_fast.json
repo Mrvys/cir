@@ -1,0 +1,109 @@
+{
+  "E1": {},
+  "E2": {},
+  "E3": {},
+  "E4": {},
+  "D1": {
+    "beer": 0,
+    "wine": 0,
+    "white wine": 0,
+    "red wine": 0,
+    "pilsner": 0,
+    "lager": 0,
+    "yes": 0,
+    "no": 0
+  },
+  "D2": {
+    "beer": 0,
+    "wine": 0,
+    "white wine": 0,
+    "red wine": 0,
+    "pilsner": 0,
+    "lager": 0,
+    "yes": 0,
+    "no": 0
+  },
+  "D3": {
+    "beer": 0,
+    "wine": 0,
+    "white wine": 0,
+    "red wine": 0,
+    "pilsner": 0,
+    "lager": 0
+  },
+  "D4": {
+    "beer": 0,
+    "wine": 0,
+    "white wine": 0,
+    "red wine": 0,
+    "pilsner": 0,
+    "lager": 0,
+    "yes": 0,
+    "no": 0
+  },
+  "D5": {
+    "beer": 0,
+    "wine": 0,
+    "white wine": 0,
+    "red wine": 0,
+    "pilsner": 0,
+    "lager": 0,
+    "yes": 0,
+    "no": 0
+  },
+  "D6": {
+    "beer": 0,
+    "wine": 0,
+    "white wine": 0,
+    "red wine": 0,
+    "pilsner": 0,
+    "lager": 0
+  },
+  "C1": {
+    "Would you like lager": 0,
+    "Would you like pilsner": 0,
+    "Pilsner or Lager": 4
+  },
+  "C2": {
+    "Would you like red wine": 0,
+    "Would you like white wine": 0,
+    "White or red wine": 4
+  },
+  "B1": {
+    "beer": 0,
+    "wine": 0,
+    "white wine": 0,
+    "red wine": 0,
+    "pilsner": 0,
+    "lager": 0,
+    "yes": 0,
+    "no": 0
+  },
+  "B2": {
+    "beer": 0,
+    "wine": 0,
+    "white wine": 0,
+    "red wine": 0,
+    "pilsner": 0,
+    "lager": 0,
+    "yes": 0,
+    "no": 0
+  },
+  "B3": {
+    "beer": 0,
+    "wine": 0,
+    "white wine": 0,
+    "red wine": 0,
+    "pilsner": 0,
+    "lager": 0
+  },
+  "A": {
+    "What would you like": 5,
+    "Would you like beer": 4,
+    "Would you like wine": 4,
+    "Would you like red wine": 0,
+    "Would you like white wine": 0,
+    "Would you like lager": 0,
+    "Would you like pilsner": 0
+  }
+}
