@@ -34,7 +34,7 @@
     "requires_user": true,
     "transitions": {
       "yes":
-        [ 1, "E1", 4, false],
+        [ 1, "E1", 14, false],
       "no":
         [ 1, "C1", -2, false]
     }
@@ -46,7 +46,7 @@
     "requires_user": true,
     "transitions": {
       "yes":
-        [ 1, "E2", 4, false],
+        [ 1, "E2", 13, false],
       "no":
         [ 1, "C1", -2, false]
     }
@@ -65,7 +65,7 @@
     "requires_user": true,
     "transitions": {
       "yes":
-        [ 1, "E3", 5, false],
+        [ 1, "E3", 15, false],
       "no":
         [ 1, "C2", -2, false]
     }
@@ -77,7 +77,7 @@
     "requires_user": true,
     "transitions": {
       "yes":
-        [ 1, "E4", 4, false],
+        [ 1, "E4", 14, false],
       "no":
         [ 1, "C2", -2, false]
     }
