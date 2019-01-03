@@ -57,32 +57,18 @@ class StateLoader:
 
         return qtable
 
-    def load_orders(self, gender, group):
-        filename = self.get_orders_filename(gender, group)
-        try:
-            with open(filename) as file:
-                orders = json.load(file)
-        except:
-            orders = {}
-
-        return orders
-
     def save_qtable(self, qtable, gender, group):
         filename = self.get_qtable_filename(gender, group)
         with open(filename, "w+") as file:
             json_qtable = json.dumps(qtable)
             file.write(json_qtable)
 
-    def save_orders(self, orders, gender, group):
-        filename = self.get_orders_filename(gender, group)
-        with open(filename, "w+") as file:
-            json_orders = json.dumps(orders)
-            file.write(json_orders)
-
     @staticmethod
     def get_qtable_filename(gender, group):
         return "../qtable_" + gender + "_" + group + ".json"
 
-    @staticmethod
-    def get_orders_filename(gender, group):
-        return "../orders_" + gender + "_" + group + ".json"
+    def load_questions(self, filename):
+        pass
+
+    def load_answers(self, filename):
+        pass
