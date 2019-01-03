@@ -10,6 +10,8 @@ class StateManager:
     __epsilon = 0.10  # TODO How and when should we decrease it?
     __learning_rate = 0.4  # TODO Fit the best
     gamma = 0.95  # discount rate
+    __last_order = ""
+    __last_questions = []
 
     def __init__(self, gender, group):
         self.__gender = gender
@@ -19,8 +21,6 @@ class StateManager:
         except:
             self.__state_loader = StateLoader("./universalUserActions.json")
 
-        # self.__questions = self.__state_loader.load_questions("path")
-        # self.__answers = self.__state_loader.load_answers("path")
         try:
             self.__states = self.__state_loader.load_states("../states.json")
         except:
@@ -28,9 +28,6 @@ class StateManager:
         self.__current_state_id = "A"
         self.__previous_state_id = "A"
         self.__qtable = self.__state_loader.load_qtable(gender, group, self.__states)
-
-        self.__last_order = ""
-        self.__last_questions = []
 
         self.__text_recognizer = TextRecognizer()
 
@@ -164,12 +161,9 @@ class StateManager:
         self.__last_questions = []
 
     def get_bias(self, action, value):
-        bias = 0
-
         if action == self.__question_prefix + self.__last_order:
-            bias += abs(value) * 0.5
-
-        return bias
+            return abs(value) * 0.5
+        return 0
 
     def still_learning(self):
         return self.__epsilon > 0.01
