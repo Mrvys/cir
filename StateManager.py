@@ -7,7 +7,7 @@ import random
 class StateManager:
 
     __question_prefix = "Would you like "
-    __epsilon = 0.10  # TODO How and when should we decrease it?
+    __epsilon = 0.00  # TODO How and when should we decrease it?
     __learning_rate = 0.4  # TODO Fit the best
     gamma = 0.95  # discount rate
     __last_order = ""
@@ -118,7 +118,8 @@ class StateManager:
         current_q = self.__qtable[state_id][action_chosen]
         reward = self.__states[state_id].get_reward(action_chosen)
         next_state_id = self.__states[state_id].get_next_state(action_chosen)
-        delta_q = self.__learning_rate * (reward + self.gamma * self.get_max_q_value(next_state_id) - current_q)
+        delta_q = self.__learning_rate * (reward + self.gamma * self.get_max_q_value(next_state_id) - current_q +
+                                          self.get_bias(action_chosen, current_q))
 
         self.__qtable[state_id][action_chosen] = current_q + delta_q
 
@@ -128,7 +129,7 @@ class StateManager:
         first = True
 
         for action, value in self.__qtable[self.__current_state_id].items():
-            # value += self.get_bias(action, value)
+            value += self.get_bias(action, value)
 
             if action in self.__last_questions:
                 continue
@@ -162,7 +163,7 @@ class StateManager:
 
     def get_bias(self, action, value):
         if action == self.__question_prefix + self.__last_order:
-            return abs(value) * 0.5
+            return abs(value) * 0.2
         return 0
 
     def still_learning(self):

@@ -31,7 +31,7 @@ class BarAssistantApp(object):
         self.chatArea = None
         self.userInput = None
 
-        self.state_manager = StateManager("man", "middle")
+        self.state_manager = StateManager("man", "young")
         self.last_question = None
 
         self.init()
