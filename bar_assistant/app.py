@@ -7,6 +7,12 @@ from threading import Timer
 
 from StateManager import StateManager
 
+import os
+from audio import Audio
+from listen import Listen
+import _thread
+
+os.environ["GOOGLE_APPLICATION_CREDENTIALS"] = "..\\Bar_Assistant-4cfe41fbee57.json"
 
 class BarAssistantApp(object):
 
@@ -33,6 +39,9 @@ class BarAssistantApp(object):
 
         self.state_manager = StateManager("man", "young")
         self.last_question = None
+
+        self.audio = Audio()
+        self.listen = Listen()
 
         self.init()
 
@@ -84,7 +93,7 @@ class BarAssistantApp(object):
 
     def init_signals(self):
         action = self.window.findChild(QtWidgets.QWidget, 'sendButton')
-        action.clicked.connect(lambda: self.receive_message())
+        action.clicked.connect(lambda: self.receive_message(''))
         action = self.window.findChild(QtWidgets.QWidget, 'speakButton')
         action.clicked.connect(lambda: self.speak_capture())
         shortcut = QtWidgets.QShortcut(QtGui.QKeySequence("Ctrl+R"), self.window)
@@ -100,7 +109,7 @@ class BarAssistantApp(object):
         self.last_question = self.state_manager.choose_question()
         self.send_message(self.last_question)
 
-    def receive_message(self):
+    def receive_message(self, mess):
         self.set_enable_user_input(False)
         self.status = self.STATUS_PROCESSING_REQUEST
         self.refresh_assistant()
@@ -109,8 +118,13 @@ class BarAssistantApp(object):
         inputArea = self.window.findChild(QtWidgets.QLineEdit, 'userInput')
         message = inputArea.text()
 
+        if message == '':
+            message = mess
+
         inputArea.setText('')
+
         self.chat.putMessage('User', message)
+
         self.refresh_chat()
 
         self.app.processEvents()
@@ -121,6 +135,7 @@ class BarAssistantApp(object):
             drink_name = self.state_manager.get_current_state().get_name()
             drink_price = self.state_manager.get_current_state().get_price()
             self.send_message(f"OK, one {drink_name}, it's {drink_price} euro.")
+            time.sleep(3.1)
 
             self.state_manager.restart()
 
@@ -132,6 +147,11 @@ class BarAssistantApp(object):
 
     def send_message(self, message):
         self.status = self.STATUS_WAITING
+
+        try:
+            _thread.start_new_thread(self.audio.audio, (message,))
+        except Exception as e:
+            print('Audio problem:' + str(e))
 
         speak_length = len(message) * self.CHAR_DELAY_IN_MILIS / 100 * self.MAGIC_CONSTANT
 
@@ -156,9 +176,15 @@ class BarAssistantApp(object):
         self.avatar.setPixmap(self.AVATAR['normal']['pixmap'])
 
     def speak_capture(self):
-        message = 'Capturing speech.'
-        self.chat.putMessage('Assistant', message)
-        self.refresh_chat()
+        try:
+            message = 'Capturing speech.'
+            self.chat.putMessage('Assistant', message)
+            message = self.listen.listen()
+            #self.chat.putMessage('User', message)
+            #self.refresh_chat()
+            self.receive_message(message)
+        except Exception as e:
+            print("listen error" + str(e))
 
     def init_chat(self):
         self.chatArea = self.window.findChild(QtWidgets.QTextEdit, 'chat')

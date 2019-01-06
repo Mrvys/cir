@@ -6,6 +6,8 @@ from audio import Audio
 import pygame as pg
 import os
 
+os.environ["GOOGLE_APPLICATION_CREDENTIALS"] = "Bar_Assistant-4cfe41fbee57.json"
+
 finish = False
 
 state_manager = StateManager("man", "student")

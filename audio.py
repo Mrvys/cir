@@ -27,13 +27,20 @@ class Audio:
 		response = client.synthesize_speech(synthesis_input, voice, audio_config)
 
 		# The response's audio_content is binary.
-		with open('resources\\output.mp3', 'w+b') as out:
-		    # Write the response to the output file.
-		    out.write(response.audio_content)
+		try:
+			with open('resources\\output.mp3', 'w+b') as out :
+				out.write(response.audio_content)
+		except:
+			with open('..\\resources\\output.mp3', 'w+b') as out:
+				# Write the response to the output file.
+				out.write(response.audio_content)
 
 		pg.mixer.init()
 		clock = pg.time.Clock()
-		f = open('resources\\output.mp3', 'rb')
+		try:
+			f = open('resources\\output.mp3', 'rb')
+		except:
+			f = open('..\\resources\\output.mp3', 'rb')
 		pg.mixer.music.load(f)
 		#pg.mixer.music.load('resources\\output.mp3')
 		pg.mixer.music.play(loops=0, start=0.0)
