@@ -46,7 +46,7 @@ class Audio:
 		pg.mixer.music.play(loops=0, start=0.0)
 		while pg.mixer.music.get_busy():
 			# check if playback has finished
-			clock.tick(30)
+			clock.tick(1)
 		pg.mixer.music.stop()
 		pg.mixer.quit()
 		f.close()

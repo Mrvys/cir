@@ -143,6 +143,7 @@ class BarAssistantApp(object):
             self.last_question = self.state_manager.choose_question()
         else:
             self.send_message("Sorry, I don't understand.")
+            time.sleep(2.6)
         self.send_message(self.last_question)
 
     def send_message(self, message):
