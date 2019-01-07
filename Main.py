@@ -6,7 +6,7 @@ from audio import Audio
 import pygame as pg
 import os
 
-os.environ["GOOGLE_APPLICATION_CREDENTIALS"] = "Bar_Assistant-4cfe41fbee57.json"
+os.environ["GOOGLE_APPLICATION_CREDENTIALS"] = "Assistant-a6ef6c01f416.json"
 
 finish = False
 
