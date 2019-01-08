@@ -137,7 +137,8 @@
            </size>
           </property>
           <property name="text">
-           <string>Speak</string>
+           <string>Speak
+(Ctrl+S)</string>
           </property>
          </widget>
         </item>
@@ -176,9 +177,7 @@
   <tabstop>speakButton</tabstop>
   <tabstop>status</tabstop>
  </tabstops>
- <resources>
-  <include location="../pics/testqrc.qrc"/>
- </resources>
+ <resources/>
  <connections>
   <connection>
    <sender>actionQuit</sender>
