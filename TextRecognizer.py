@@ -25,9 +25,9 @@ class TextRecognizer:
             doc2 = self.__nlp(action)
             similarity = doc1.similarity(doc2)
             #print(doc1.text, doc2.text, similarity)
-            if action in user_input:
-                return action
-            elif top_score['score'] < similarity:
+            #if action in user_input:
+                #return action
+            if top_score['score'] < similarity:
                 top_score['score'] = similarity
                 top_score['input'] = action
 
