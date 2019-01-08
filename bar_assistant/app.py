@@ -1,6 +1,5 @@
 import os
 import sys
-import time
 from time import sleep
 from PyQt5 import QtWidgets, QtCore, QtGui, QtSvg, uic
 from threading import Timer
@@ -21,6 +20,8 @@ class BarAssistantApp(object):
         self.VALUE_ROLE = QtCore.Qt.UserRole
         self.STATUS_WAITING = 'Waiting'
         self.STATUS_PROCESSING_REQUEST = 'Processing request'
+        self.STATUS_LISTENING = 'Listening'
+        self.STATUS_SPEAKING = 'Speaking'
         self.AVATAR = {'normal': {'name':'smile.jpg'},
                        'talking': {'name':'smile_talking.gif'}}
         self.PICS_PATH = './pics/'
@@ -62,8 +63,6 @@ class BarAssistantApp(object):
             self.init_user_area()
             self.init_signals()
 
-            self.choose_first_question()
-
         except Exception as e:
             self.show_error('Application could not initiate properly due to this error: \n' + str(e))
             sys.exit(1)
@@ -96,8 +95,8 @@ class BarAssistantApp(object):
         action.clicked.connect(lambda: self.receive_message(''))
         action = self.window.findChild(QtWidgets.QWidget, 'speakButton')
         action.clicked.connect(lambda: self.speak_capture())
-        shortcut = QtWidgets.QShortcut(QtGui.QKeySequence("Ctrl+R"), self.window)
-        shortcut.activated.connect(self.send_message)
+        # shortcut = QtWidgets.QShortcut(QtGui.QKeySequence("Ctrl+R"), self.window)
+        # shortcut.activated.connect(self.send_message)
         shortcut = QtWidgets.QShortcut(QtGui.QKeySequence("Ctrl+S"), self.window)
         shortcut.activated.connect(self.speak_capture)
 
@@ -105,9 +104,11 @@ class BarAssistantApp(object):
         self.AVATAR['normal']['pixmap'] = QtGui.QPixmap(self.PATH + self.PICS_PATH + self.AVATAR['normal']['name'])
         self.AVATAR['talking']['movie'] = QtGui.QMovie(self.PATH + self.PICS_PATH + self.AVATAR['talking']['name'])
 
-    def choose_first_question(self):
+    def greetings(self):
         self.last_question = self.state_manager.choose_question()
         self.send_message(self.last_question)
+        self.set_enable_user_input(True)
+        self.userInput.setFocus()
 
     def receive_message(self, mess):
         self.set_enable_user_input(False)
@@ -135,7 +136,7 @@ class BarAssistantApp(object):
             drink_name = self.state_manager.get_current_state().get_name()
             drink_price = self.state_manager.get_current_state().get_price()
             self.send_message(f"OK, one {drink_name}, it's {drink_price} euro.")
-            time.sleep(3.1)
+            sleep(3.1)
 
             self.state_manager.restart()
 
@@ -143,21 +144,27 @@ class BarAssistantApp(object):
             self.last_question = self.state_manager.choose_question()
         else:
             self.send_message("Sorry, I don't understand.")
-            time.sleep(2.6)
+            sleep(2.6)
         self.send_message(self.last_question)
+        self.set_enable_user_input(True)
+        self.userInput.setFocus()
+
 
     def send_message(self, message):
-        self.status = self.STATUS_WAITING
+        self.set_enable_user_input(False)
+        self.status = self.STATUS_SPEAKING
+        self.refresh_assistant()
+        self.app.processEvents()
 
         try:
             _thread.start_new_thread(self.audio.audio, (message,))
         except Exception as e:
             print('Audio problem:' + str(e))
 
-        speak_length = len(message) * self.CHAR_DELAY_IN_MILIS / 100 * self.MAGIC_CONSTANT
+        # speak_length = len(message) * self.CHAR_DELAY_IN_MILIS / 100 * self.MAGIC_CONSTANT
 
-        timer = Timer(speak_length, self.shut_up)
-        timer.start()
+        # timer = Timer(speak_length, self.shut_up)
+        # timer.start()
 
         # self.refresh_assistant()
         # message = self.assistant.response()
@@ -169,23 +176,25 @@ class BarAssistantApp(object):
                 sleep(0.01)
                 self.app.processEvents()
 
-        self.set_enable_user_input(True)
-
-        self.userInput.setFocus()
+        self.shut_up()
+        self.app.processEvents()
 
     def shut_up(self):
+        self.status = self.STATUS_WAITING
+        self.refresh_assistant()
         self.avatar.setPixmap(self.AVATAR['normal']['pixmap'])
 
     def speak_capture(self):
+        self.set_enable_user_input(False)
+        self.status = self.STATUS_LISTENING
+        self.refresh_assistant()
+        self.app.processEvents()
         try:
-            message = 'Capturing speech.'
-            self.chat.putMessage('Assistant', message)
             message = self.listen.listen()
-            #self.chat.putMessage('User', message)
-            #self.refresh_chat()
             self.receive_message(message)
         except Exception as e:
             print("listen error" + str(e))
+        self.set_enable_user_input(True)
 
     def init_chat(self):
         self.chatArea = self.window.findChild(QtWidgets.QTextEdit, 'chat')
@@ -198,9 +207,11 @@ class BarAssistantApp(object):
     def refresh_assistant(self):
         lineedit = self.window.findChild(QtWidgets.QLineEdit, 'status')
         lineedit.setText(self.status)
-        if self.status == self.STATUS_WAITING:
+        if self.status == self.STATUS_WAITING or\
+           self.status == self.STATUS_LISTENING:
             self.avatar.setPixmap(self.AVATAR['normal']['pixmap'])
-        if self.status == self.STATUS_PROCESSING_REQUEST:
+        if self.status == self.STATUS_PROCESSING_REQUEST or\
+           self.status == self.STATUS_SPEAKING:
             movie = self.AVATAR['talking']['movie']
             self.avatar.setMovie(movie)
             movie.start()
@@ -210,6 +221,8 @@ class BarAssistantApp(object):
 
     def run(self):
         self.window.show()
+
+        self.greetings()
 
         return self.app.exec()
 
