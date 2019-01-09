@@ -1,8 +1,0 @@
-yes
-no
-beer
-wine
-white wine
-red wine
-pilsner
-lager
