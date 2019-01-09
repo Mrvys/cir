@@ -1,8 +1,6 @@
-import os
 import sys
 from time import sleep
-from PyQt5 import QtWidgets, QtCore, QtGui, QtSvg, uic
-from threading import Timer
+from PyQt5 import QtWidgets, QtCore, QtGui, uic
 
 from StateManager import StateManager
 
@@ -13,6 +11,7 @@ import _thread
 
 os.environ["GOOGLE_APPLICATION_CREDENTIALS"] = "..\\Assistant-a6ef6c01f416.json"
 
+
 class BarAssistantApp(object):
 
     def __init__(self, path='./bar_assistant/'):
@@ -22,8 +21,8 @@ class BarAssistantApp(object):
         self.STATUS_PROCESSING_REQUEST = 'Processing request'
         self.STATUS_LISTENING = 'Listening'
         self.STATUS_SPEAKING = 'Speaking'
-        self.AVATAR = {'normal': {'name':'smile.jpg'},
-                       'talking': {'name':'smile_talking.gif'}}
+        self.AVATAR = {'normal': {'name': 'smile.jpg'},
+                       'talking': {'name': 'smile_talking.gif'}}
         self.PICS_PATH = './pics/'
         self.UI_PATH = './ui/'
         self.CHAR_DELAY_IN_MILIS = 3
@@ -73,7 +72,6 @@ class BarAssistantApp(object):
         self.assistant = Assistant()
         self.init_avatar_area()
         self.refresh_assistant()
-
 
     def init_avatar_area(self):
         # získáme oblast s posuvníky z Qt Designeru
@@ -149,7 +147,6 @@ class BarAssistantApp(object):
         self.set_enable_user_input(True)
         self.userInput.setFocus()
 
-
     def send_message(self, message):
         self.set_enable_user_input(False)
         self.status = self.STATUS_SPEAKING
@@ -207,11 +204,11 @@ class BarAssistantApp(object):
     def refresh_assistant(self):
         lineedit = self.window.findChild(QtWidgets.QLineEdit, 'status')
         lineedit.setText(self.status)
-        if self.status == self.STATUS_WAITING or\
-           self.status == self.STATUS_LISTENING:
+        if self.status == self.STATUS_WAITING or \
+                self.status == self.STATUS_LISTENING:
             self.avatar.setPixmap(self.AVATAR['normal']['pixmap'])
-        if self.status == self.STATUS_PROCESSING_REQUEST or\
-           self.status == self.STATUS_SPEAKING:
+        if self.status == self.STATUS_PROCESSING_REQUEST or \
+                self.status == self.STATUS_SPEAKING:
             movie = self.AVATAR['talking']['movie']
             self.avatar.setMovie(movie)
             movie.start()
@@ -231,11 +228,11 @@ class BarAssistantApp(object):
         QtWidgets.QMessageBox.critical(self.window, 'Error', msg)
 
     def set_enable_user_input(self, enable):
-        sendButton = self.window.findChild(QtWidgets.QWidget,'sendButton')
+        sendButton = self.window.findChild(QtWidgets.QWidget, 'sendButton')
         sendButton.setEnabled(enable)
-        speakButton = self.window.findChild(QtWidgets.QWidget,'speakButton')
+        speakButton = self.window.findChild(QtWidgets.QWidget, 'speakButton')
         speakButton.setEnabled(enable)
-        lineedit = self.window.findChild(QtWidgets.QWidget,'userInput')
+        lineedit = self.window.findChild(QtWidgets.QWidget, 'userInput')
         lineedit.setEnabled(enable)
 
 
@@ -270,7 +267,7 @@ class Chat:
         # text = '\n'.join([str(msg.username). + ': 'for msg in self.chat])
         text = ''
         for msg in self.chat:
-            username = str(msg['user']).ljust(12,' ')
+            username = str(msg['user']).ljust(12, ' ')
             message = username + ': ' + msg['text']
             text += message + '\n'
         return text

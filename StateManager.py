@@ -7,7 +7,7 @@ import random
 class StateManager:
 
     __question_prefix = "Would you like "
-    __epsilon = 0.00  # TODO How and when should we decrease it?
+    __epsilon = 0.0  # TODO How and when should we decrease it?
     __learning_rate = 0.4  # TODO Fit the best
     gamma = 0.95  # discount rate
     __last_order = ""
