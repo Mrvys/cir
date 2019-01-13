@@ -10,9 +10,12 @@ class TextRecognizer:
         self.__nlp = spacy.load('en')  # Load English tokenizer, tagger, parser, NER and word vectors
 
     def choose_most_sufficient(self, user_input, actions):
-        if user_input == "red" or user_input == "white":
-            user_input = user_input + ' wine'
-            return user_input.lower()
+        if "red" in user_input:
+            index = user_input.find('red')
+            user_input = user_input[:index + 3] + ' wine ' + user_input[index + 4:]
+        if "white" in user_input:
+            index = user_input.find('white')
+            user_input = user_input[:index + 5] + ' wine ' + user_input[index + 6:]
 
         # Determine semantic similarities
         user_input = user_input.lower()
@@ -21,28 +24,49 @@ class TextRecognizer:
             'score': 0,
             'input': None
         }
+        actions_contained = []
 
         for action in actions:
             doc2 = self.__nlp(action)
             similarity = doc1.similarity(doc2)
-            #print(doc1.text, doc2.text, similarity)
-            #if action in user_input:
-                #return action
+            if action in user_input:
+                actions_contained.append(action)
             if top_score['score'] < similarity:
                 top_score['score'] = similarity
                 top_score['input'] = action
 
-        if top_score['score'] > 0.6:
-            #print(top_score['input'])
+        if len(actions_contained) > 1:
+            return self.find_most_sufficient(actions_contained, user_input)
+        elif top_score['score'] > 0.6:
             return top_score['input']
         return -1
 
         # TODO Change to choose the most similar phrase
 
-        # user_input_nlp = nlp(user_input)
-        # if user_input_nlp.similarity(greeting) > 0.7:
-        #     print("Good evening!")
-        # else:
-        #     print("Im sorry I don't understand")
+    def find_most_sufficient(self, actions_contained, user_input):
+        top_score = {
+            'score': 0,
+            'input': None
+        }
+        for action in actions_contained:
+            if action != "yes" and action != "no":
+                want_product = self.__nlp("I would like " + action)
+                dont_want_product = self.__nlp("I would not like " + action)
 
-    # sentiment for yes/no
+                if "no" in actions_contained:
+                    user_input = user_input.replace("no", "")
+                input_nlp = self.__nlp(user_input)
+                similarity = input_nlp.similarity(want_product)
+                similarity_dont = input_nlp.similarity(dont_want_product)
+
+                if similarity_dont > similarity and similarity_dont > top_score['score']:
+                    top_score['score'] = similarity_dont
+                    top_score['input'] = 'no'
+
+                if similarity > top_score['score']:
+                    top_score['score'] = similarity
+                    top_score['input'] = action
+
+        if top_score['score'] > 0.5:
+            return top_score['input']
+        return -1

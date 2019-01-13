@@ -141,7 +141,7 @@ class BarAssistantApp(object):
         if response != -1:
             self.last_question = self.state_manager.choose_question()
         else:
-            self.send_message("Sorry, I don't understand.")
+            self.send_message("Sorry, we don't have that.")
             sleep(2.6)
         self.send_message(self.last_question)
         self.set_enable_user_input(True)
