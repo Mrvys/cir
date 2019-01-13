@@ -215,6 +215,7 @@ class BarAssistantApp(object):
 
     def refresh_chat(self):
         self.chatArea.setText(self.chat.getText())
+        self.chatArea.moveCursor(QtGui.QTextCursor.End)
 
     def run(self):
         self.window.show()
